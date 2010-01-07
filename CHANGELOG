@@ -1,0 +1,43 @@
+!!! This file is now discontinued (0.81 is the last version). See commit log for changes instead.
+
+
+[2009-04-14 20:32] [0.81] Fixed rendering bug in example application which generated a broken HTML table.
+[2009-04-14 20:32] [0.81] Fixed serious typo bug in example application that broke list view with parse error.
+[2009-04-14 20:32] [0.81] Added message-id to MMSDecoder->confirm() function, so that it conforms with MMS 1.2 specification (Thanks to Mikko Antila for pointing this out). This fixes a problem with Nokia 3120, and possibly other Nokia phones, which caused the phone to reboot.
+[2009-04-14 19:54] [0.81] Fixed example application to function correctly with PHP strict mode.
+[2009-04-14 19:54] [0.81] Fixed MMSDecoder to function correctly with PHP strict mode.
+
+[2006-11-04 16:32] [0.80] Added support for utf-8 character encoding, for the Encoded-String-Value fields.
+[2006-11-04 16:03] [0.80] Fixed a bug in the Encoded-String-Value decoding.
+[2004-12-27 13:07] [0.80] Fixed a bug which occured when parsing the EXPIRY field (every time).
+
+[2004-08-03 18:38] [0.78] Added a document which describes the MMS Decoder API. 
+
+[2004-08-03 14:28] [0.77] Changed the structure of the package. There is only one package now, which includes the example application in a separate directory. 
+[2004-08-03 14:13] [0.77] Added an installation file, and a dump of the mysql tables to the application. A new release is required since it's quite hard to create the tables yourself, by just looking at the code.
+
+[2004-08-02 17:18] [0.76] Added a confirm function in the class, instead of having it in the application. 
+
+[2004-07-31 15:45] [0.75] A typo in the final realease version was found (good thing I am so lazy, and has not yet released it ;). Planning to do that in the next few days. 
+[2004-05-24 00:36] [0.75] Some final code clean up and the first version (0.75) is ready to be released.
+
+[2004-05-13 20:19] Added almost full support for the content-type parsing, finally! All the WSP parameter-values aren't parsed yet, but that doesn't feel as urgent as the actual content-type. The content-type parsing is still separated in two places (one for the whole MMS and one for the parts), which has to be fixed in the future. 
+[2004-05-12 23:07] Messed around with the content-type more. Didn't fix anything, but I'm close to crack it.
+[2004-05-12 21:51] The content-type is killing me! When I finally got it to work with all my MMS PDUs I applied the same decoding on the MMS parts, and it only works in some cases, so apparently something is wrong with my code :(! Guess I'll have to continue the debugging. 
+[2004-05-12 16:59] Added better parsing support of the content-type, and I'm getting closer to a perfect parsing mechanism ;). The problems I previously had with the content-type was that I completely ignored the parameter fields, which caused problems in all om my PDUs except for two which didn't have any parameter. Anyway, I run the script and finally all data seemed to be parsed! YAY! Now let's parse that part-header and we'll soon be ready for a release! :)
+[2004-05-10 18:52] Added the parseParts() function, which is called in parse() after the parseHeader() is done. Added code to get the headerlen, datalen and data from the parts (the header is just skipped for now) to see if I could get any understandable data. After some testing I realized that I got the right data when the content-type was parsed correctly which it isn't in my PDUs except for two of them, so that's whats next for me. 
+[2004-05-10 18:07] Added better support for parsing the content-type field in the header. Though I still don't fully understand the encoding of that field totally, which seem to be pretty messy. 
+[2004-05-10 17:09] Fixed the parseUint function which was still buggy. I had to struggle a LOT this time. Hope it's fixed now. :)
+[2004-04-15 17:10] Fixed a bug in the parseUint() function. The pos variable was not increased if the most significant bit was not set.
+[2004-04-15 16:58] Added code to the HEX-debug function, which is now working properly.
+[2004-03-21 04:24] Added prototype for the MMSPart class. 
+[2004-03-21 02:07] Applied the Affero General Public License to the program to prevent the use of the ASP loophole when it's released. 
+[2004-03-18 17:48] Added support for the (partly) parsing of the Content-type of an MMS. 
+[2004-03-17 22:25] Fixed some bugs, a litle more documentation of the code and I also tested the decoder with many PDU's with successful results :).
+[2004-03-16 22:18] Changed the rawdata.php to save a file with the prefix "_info" containing the $_SERVER content (user-agent etc.) so that I could start collecting MMS PDUs.
+[2004-03-16 12:11] Added support for decoding expiry field. Only content-type left now :)
+[2004-03-15 22:18] Added support for decoding Content-general-form values which will be used when decoding Content-type. 
+[2004-03-15 21:09] Changed so the class now check if the Message-Type field is m-send-req (Octet 128). And stops parsing the header after content-type has been parsed. 
+[2004-03-15 20:36] Added some documentation about the header encoding in the code. 
+[2004-03-02 02:18] Added the prototype for a new debug function used to output MMS-data in HEX. 
+[2004-03-02 02:11] Created this changelog file. The basic structure and the decoding of some MMS fields are already built. 

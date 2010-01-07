@@ -1,0 +1,43 @@
+# phpMyAdmin SQL Dump
+# version 2.5.6
+# http://www.phpmyadmin.net
+#
+# Host: localhost
+# Created: 03 augusti 2004 kl 12:59
+# Serverversion: 4.0.20
+# PHP-version: 4.2.3
+# 
+# Database : `mms`
+# 
+CREATE DATABASE `mms`;
+USE mms;
+
+# --------------------------------------------------------
+
+#
+# Struture for table `mms`
+#
+
+CREATE TABLE `mms` (
+  `id` int(10) NOT NULL auto_increment,
+  `from` char(255) NOT NULL default '',
+  `to` char(255) NOT NULL default '',
+  `subject` char(255) NOT NULL default '',
+  `content_type` char(255) NOT NULL default '',
+  PRIMARY KEY  (`id`)
+) TYPE=MyISAM AUTO_INCREMENT=28 ;
+
+# --------------------------------------------------------
+
+#
+# Structure for table `parts`
+#
+
+CREATE TABLE `parts` (
+  `id` int(10) NOT NULL auto_increment,
+  `mmsid` int(10) NOT NULL default '0',
+  `datalen` int(12) NOT NULL default '0',
+  `content_type` varchar(255) NOT NULL default '',
+  `data` blob NOT NULL,
+  PRIMARY KEY  (`id`)
+) TYPE=MyISAM AUTO_INCREMENT=33 ;
