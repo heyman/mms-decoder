@@ -7,12 +7,15 @@ It's also written in a rush, so everything isn't as good as I would like it
 to be. 
 
 Installation:
- - Upload all PHP-scripts in hte example_application dir to the webserver. 
- - Access the installation script over HTTP. Enter the correct information in the form, 
-   and runt the script. Some webhotells only allow you to have one database, that is why 
-   I have the "Use existing DB" option. 
+ - Upload all MMS Decoder's PHP-scripts to the webserver (the example_application expects to 
+   find the mmsdecoder.php file in it's parent directory). 
+ - Access the installation script over HTTP (install.php). Enter the correct information in
+   the form, and run the script. Some webhosts only allow you to have one database, that is 
+   why I have the "Use existing DB" option. 
  - Set the correct settings in the config.php file. 
- - You should now be ready to use the application. Feel free to e-mail me with any questings.
+ - You should now be ready to use the application.
+ - It's highly recommended that you remove or rename the install.php script after you have 
+   your database tables set up.
 
 
 Current supports:
@@ -26,14 +29,13 @@ TODO:
  - Make the presentation nicer
 
 
-Future versions are planned. Fixes and contributions are accepted if I
-think they fit. 
+Future versions are not planned. Fixes and contributions are accepted if I think they fit. 
 
 
 Contact:
 --------------------
 http://heyman.info
-jonatan@heyman.info
+jonatan [at] heyman.info
 --------------------
 
 ===========================================================================
