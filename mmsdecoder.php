@@ -1,5 +1,5 @@
 <?php
-// Version 0.81 //
+// Version 0.82 //
 
 /**
  * Copyright (C) 2004-2009 Jonatan Heyman
