@@ -23,9 +23,10 @@
  */
 
 
-define( "DEBUG", 0 );	/* Print parseerrors? Print values while they are parsed? If you enable this, 
-			   getting the binary encoded confirmation message whensending MMS from mobiles 
-			   will not work. This is only for development purpose. */
+if (!defined("DEBUG"))
+   define( "DEBUG", 0 );	/* Print parseerrors? Print values while they are parsed? If you enable this, 
+	   	    		   getting the binary encoded confirmation message whensending MMS from mobiles 
+				   will not work. This is only for development purpose. */
 
 
 /*---------------------------------------------------*
@@ -67,6 +68,9 @@ define( "STATUS",		0x95 );
 define( "SUBJECT",		0x96 );
 define( "TO",			0x97 );
 define( "TRANSACTION_ID",	0x98 );
+
+define( "FROM_ADDRESS_PRESENT_TOKEN", 0x80);
+define( "FROM_INSERT_ADDRESS_TOKEN",  0x81);
 
 
 /*--------------------------*
@@ -357,15 +361,14 @@ class MMSDecoder {
 				break;
 			case FROM:
 				/**
-				 * TODO: make better encoding for this field
 				 * The encoding mechanism works like this:
-				 *  From-value = [0x01 or VALUE-length] [0x80 or 0x81] [Optional: Encoded-String-Value]
-				 * If we have 0x80 we have an encoded-string-value (0x80 is part of that string).
+				 *  From-value = [VALUE-length] [0x80 or 0x81] [Optional: Encoded-String-Value]
+				 * If we have 0x80 we have an encoded-string-value (0x80 is not part of that string).
 				 * If we have 0x81 this is a insert-adress-token which means that the MMSC is supposed
 				 * to insert it, which means that we can't retrieve the sender.
 				 */
 				
-				$this->FROM = $this->parseEncodedStringValue();
+				$this->FROM = $this->parseFromValue();
 				if (DEBUG) $this->debug("From", $this->FROM);
 				break;
 			case MESSAGE_CLASS:
@@ -382,7 +385,7 @@ class MMSDecoder {
 				
 				// check that the message type is m-send-req
 				if ($this->MESSAGETYPE != 128)
-					debug("Wrong type", "The message-type field is not 'm-send-req' (Octet 128)", 1);
+					$this->debug("Wrong type", "The message-type field is not 'm-send-req' (Octet 128)", 1);
 				
 				if (DEBUG) $this->debug("Message-type", $mmsMessageTypes[$this->MESSAGETYPE]);
 				break;
@@ -538,6 +541,31 @@ class MMSDecoder {
 		return false;
 	}
 	
+	/*-------------------------------------------------------------------------------------------------*
+	 * Parse From-value                                                                                *
+	 * From-value = Value-length (Address-present-token Encoded-string-value | Insert-address-token )  *
+	 *                                                                                                 *
+	 * Address-present-token = <Octet 128>                                                             *
+	 * Insert-address-token = <Octet 129>                                                              *
+	 *-------------------------------------------------------------------------------------------------*/
+	function parseFromValue() {
+		$len = $this->parseValueLength();
+		
+		if ($this->data[$this->pos] == FROM_ADDRESS_PRESENT_TOKEN) {
+		   	if (DEBUG) $this->debug("parseFromValue", "Address-present-token found", $this->pos);
+		   	$this->pos++;
+			return $this->parseEncodedStringValue();
+		} else if ($this->data[$this->pos] == FROM_INSERT_ADDRESS_TOKEN) {
+		        if (DEBUG) $this->debug("parseFromValue", "Insert-address-token found", $this->pos);
+		       	$this->pos++;
+		        return "";
+		} else {
+		        // something is wrong since none of the tokens are present, try to skip this field
+			if (DEBUG) $this->debug("parseFromValue", "No from token found, trying to skip the value field by jumping " . $len . " bytes", $this->pos);
+			$this->pos += $len;
+		}
+	}
+	
 	/*-------------------------------------------------------------------*
 	 * Parse message-class                                               *
 	 * message-class-value = Class-identifier | Token-text               *
@@ -643,6 +671,7 @@ class MMSDecoder {
 			die("Parse error: Short-length-octet (" . $this->data[$this->pos-1] . ") > 30 in Long-integer at offset " . $this->pos-1 . "!\n");
 		
 		// Get the long-integer
+		$longint = 0;
 		for ($i = 0; $i < $octetcount; $i++) {
 			$longint = $longint << 8;
 			$longint += $this->data[$this->pos++];

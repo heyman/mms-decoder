@@ -22,11 +22,11 @@
  * Francisco, CA 94107 USA. 
  */
 
-// load mms decoder class
-require_once("../mmsdecoder.php");
-
 // turn on debugging
 define("DEBUG", 1);
+
+// load mms decoder class
+require_once("../mmsdecoder.php");
 
 ?>
 
