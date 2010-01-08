@@ -62,7 +62,7 @@ if (isset($_POST['create'])) {
 		  `mmsid` int(10) NOT NULL default '0',
 		  `datalen` int(12) NOT NULL default '0',
 		  `content_type` varchar(255) NOT NULL default '',
-		  `data` blob NOT NULL,
+		  `data` mediumblob NOT NULL,
 		  PRIMARY KEY  (`id`)
 		) TYPE=MyISAM AUTO_INCREMENT=33 ;
 	";
